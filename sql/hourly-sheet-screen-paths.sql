@@ -5,7 +5,7 @@ WITH all_hourly_screens AS (
     (SELECT params.value.string_value FROM UNNEST(event_params) params WHERE event_name = "screenview" and params.key = "screen_name") as screen_name,
     event_timestamp
 FROM `phoenix-production-apps.analytics_227444337.events_*` t CROSS JOIN UNNEST (event_params) AS params
-WHERE _TABLE_SUFFIX BETWEEN '20210101' AND '20210131' --> Adjust date range here
+WHERE _TABLE_SUFFIX BETWEEN '20210101' AND '20210101' --> Adjust date range here
 AND platform = "ANDROID"
 AND params.value.string_value IN ("hourly_forecast","hourly_details_sheet")
 AND (SELECT params.value.int_value FROM UNNEST(event_params) params WHERE event_name="screenview" and params.key= "ga_session_number") IS NOT NULL
@@ -69,18 +69,18 @@ SELECT
   IF(screen_9 IS NULL,"",">"),IFNULL(screen_9,""),
   IF(screen_10 IS NULL,"",">"),IFNULL(screen_10,"")
   ) AS screen_path,
-  COUNT(DISTINCT user_pseudo_id) AS users,
-  COUNT(DISTINCT session_id) AS sessions
+  user_pseudo_id AS users,
+  session_id AS sessions
 FROM user_journey 
 WHERE session_id IS NOT NULL
-GROUP BY 1
+GROUP BY 1,2,3
 ORDER BY sessions desc
 )
 
 SELECT
   CONTAINS_SUBSTR(screen_path, "hourly_details_sheet>hourly_forecast>hourly_details_sheet") AS close,
   CONTAINS_SUBSTR(screen_path, "hourly_details_sheet>hourly_details_sheet") AS swipe,
-  COUNT(users) AS users,
-  COUNT(sessions) AS sessions
+  COUNT(DISTINCT users) AS users,
+  COUNT(DISTINCT sessions) AS sessions
 FROM screen_path_journey
 GROUP BY 1,2;
