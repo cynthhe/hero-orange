@@ -1,6 +1,6 @@
-# Run VBA code in Outlook to bulk save attachments from multiple emails
+'Run VBA code in Outlook to bulk save attachments from multiple emails
 
-# Save Exact Same Name Attachments Directly
+'Save Exact Same Name Attachments Directly
 
 Dim GCount As Integer
 Dim GFilepath As String
@@ -89,7 +89,7 @@ If xCid <> "" Then
 End If
 End Function
 
-# Check For Duplicates
+'Check For Duplicates
 Public Sub SaveAttachments()
 'Update 20200821
 Dim xMailItem As Outlook.MailItem
